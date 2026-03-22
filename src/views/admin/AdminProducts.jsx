@@ -4,6 +4,7 @@ import * as bootstrap  from 'bootstrap';
 
 import Pagination from '../../components/Pagination';
 import ProductModal from '../../components/ProductModal';
+import useMessage from '../../hooks/useMessage';
 
 const API_BASE = import.meta.env.VITE_API_BASE;
 const API_PATH = import.meta.env.VITE_API_PATH;
@@ -60,14 +61,19 @@ function AdminProducts() {
         productModalRef.current.hide();
     }
 
+    // 跳出通知
+    const { showError, showSuccess } = useMessage();
+
     // 串接產品列表 API
     const getProducts = async(page = 1) => {
     try {
         const res = await axios.get(`${API_BASE}/api/${API_PATH}/admin/products?page=${page}`);
         setProducts(res.data.products); // 寫入產品列表
         setPagination(res.data.pagination); // 寫入分頁資料
+        showSuccess('取得產品列表成功'); // 跳出成功通知
     } catch (error) {
         console.log(error.response.data.message);
+        showError(error.response.data.message); // 跳出錯誤通知
     }
     }
 

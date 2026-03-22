@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import useMessage from "../hooks/useMessage";
 
 const API_BASE = import.meta.env.VITE_API_BASE;
 const API_PATH = import.meta.env.VITE_API_PATH;
@@ -81,6 +82,9 @@ function ProductModal({
         });
     }
 
+    // 跳出通知
+    const { showError, showSuccess } = useMessage();
+
     // 串接新增/更新產品列表 API
     const updateProduct = async(id) => {
         // 決定 API 端點和方法
@@ -109,10 +113,12 @@ function ProductModal({
         try {
             await axios[method](url, productData);
 
+            showSuccess('更新成功'); // 跳出刪除成功通知
             closeModal();  // 關閉 Modal 並重新載入資料
             getProducts(); // 取得產品列表
         } catch (error) {
-            console.log(error)
+            console.log(error);
+            showError(error.response.data.message); // 跳出錯誤通知
         }
     }
 
@@ -121,10 +127,12 @@ function ProductModal({
         try {
             await axios.delete(`${API_BASE}/api/${API_PATH}/admin/product/${id}`);
 
+            showSuccess('刪除成功'); // 跳出刪除成功通知
             closeModal();  // 關閉 Modal 並重新載入資料
             getProducts(); // 取得產品列表
         } catch (error) {
             console.log(error);
+            showError(error.response.data.message); // 跳出錯誤通知
         }
     }
 
@@ -410,4 +418,4 @@ function ProductModal({
     </>)
 }
 
-export default ProductModal
+export default ProductModal;

@@ -1,11 +1,15 @@
 import { RouterProvider } from 'react-router-dom';
 import { router } from './router';
+import MessageToast from './components/MessageToast';
 
 
 function App() {
 
   return (
-    <RouterProvider router={router} future={{ v7_startTransition: true, v7_relativeSplatPath: true}}/>
+    <>
+      <MessageToast />
+      <RouterProvider router={router} future={{ v7_startTransition: true, v7_relativeSplatPath: true}}/>
+    </>
   )
 }
 
