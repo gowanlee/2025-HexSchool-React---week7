@@ -26,9 +26,6 @@ const INITIAL_TEMPLATE_DATA = {
 }
 
 function AdminProducts() {
-    // 登入狀態管理（控制顯示登入或產品頁）
-    const [isAuth, setIsAuth] = useState(false);
-
     // 產品資料狀態
     const [products, setProducts] = useState([]);
 
@@ -79,44 +76,22 @@ function AdminProducts() {
 
     // 初始化
     useEffect(() => {
-    // 讀取 cookie
-    const token = document.cookie
-        .split(';')
-        .find((row) => row.startsWith('hexToken='))
-        ?.split('=')[1];
+        // 初始化 Bootstrap Modal
+        productModalRef.current = new bootstrap.Modal('#productModal', {
+            keyboard: false
+        })
 
-    // 如果有拿到 token 再帶入headers   
-    if (token) {
-        axios.defaults.headers.common['Authorization'] = token; // 修改實體建立時所指派的預設配置（登入成功後，API請求都會自動帶上token）
-    }
+        // Modal 關閉時移除焦點
+        document
+            .querySelector("#productModal")
+            .addEventListener("hide.bs.modal", () => {
+            if (document.activeElement instanceof HTMLElement) {
+                document.activeElement.blur();
+            }
+        })
 
-    // 初始化 Bootstrap Modal
-    productModalRef.current = new bootstrap.Modal('#productModal', {
-        keyboard: false
-    })
-
-    // Modal 關閉時移除焦點
-    document
-        .querySelector("#productModal")
-        .addEventListener("hide.bs.modal", () => {
-        if (document.activeElement instanceof HTMLElement) {
-            document.activeElement.blur();
-        }
-    });
-
-    // 初始化搭配useEffect串接登入驗證 API
-    // 檢查管理員權限並載入資料
-    const checkAdmin = async() => {
-        try {
-        await axios.post(`${API_BASE}/api/user/check`);
-        setIsAuth(true);
-        getProducts(); // 載入產品資料
-        } catch (error) {
-        console.log(error.response.data.message);
-        }
-    }
-
-    checkAdmin();
+        // 取得產品列表
+        getProducts();
     }, [])
 
     return (

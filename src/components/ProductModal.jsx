@@ -113,7 +113,7 @@ function ProductModal({
         try {
             await axios[method](url, productData);
 
-            showSuccess('更新成功'); // 跳出刪除成功通知
+            showSuccess('已更新產品'); // 跳出刪除成功通知
             closeModal();  // 關閉 Modal 並重新載入資料
             getProducts(); // 取得產品列表
         } catch (error) {
