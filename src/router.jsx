@@ -7,8 +7,12 @@ import Cart from "./views/frontend/Cart";
 import NotFound from "./views/frontend/NotFound";
 import Checkout from './views/frontend/Checkout';
 import Login from './views/Login';
+import AdminLayout from './layout/AdminLayout';
+import AdminProducts from './views/admin/AdminProducts';
+import AdminOrders from './views/admin/AdminOrders';
 
 export const router = createHashRouter([
+    // 前台頁面
     {
         path: '/',
         element: <FrontendLayout />,
@@ -39,6 +43,24 @@ export const router = createHashRouter([
             }
         ]
     },
+
+    // 後台頁面
+    {
+        path: 'admin',
+        element: <AdminLayout />,
+        children: [
+            {
+                path: 'product',
+                element: <AdminProducts />
+            },
+            {
+                path: 'order',
+                element: <AdminOrders />
+            }
+        ]
+    },
+
+    // 錯誤頁面
     {
         path: '*',
         element: <NotFound />

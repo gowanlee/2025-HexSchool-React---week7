@@ -2,11 +2,15 @@ import '../assets/style.css';
 import axios from 'axios';
 import { useForm } from 'react-hook-form';
 import { emailValidation, passwordValidation } from '../utils/validation';
+import { useNavigate } from 'react-router-dom';
 
 const API_BASE = import.meta.env.VITE_API_BASE;
 const API_PATH = import.meta.env.VITE_API_PATH;
 
 function Login() {
+    // 路由切換
+    const navigate = useNavigate();
+
     // react-hook-form
     const {
         register,
@@ -30,6 +34,8 @@ function Login() {
 
         document.cookie = `hexToken=${token};expires=${new Date(expired)}`; // 設定 cookie
         axios.defaults.headers.common['Authorization'] = token; // 修改實體建立時所指派的預設配置（登入成功後，API請求都會自動帶上token）
+
+        navigate('/admin/product'); // 登入成功時自動轉到此網址
 
         //setIsAuth(true); // 登入狀態改為 true
         //getProducts(); // 取得產品列表資料
@@ -71,4 +77,4 @@ function Login() {
     )
 }
 
-export default Login
+export default Login;
